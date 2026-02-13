@@ -4,54 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中１理科1分野３学期学年末試験対策</title>
-    <!-- Tailwind CSS (Utility First CSS Framework) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-color: #f0f9ff; /* Light Sky Blue background */
-            touch-action: manipulation; /* Prevent double-tap zoom */
+            background-color: #f0f9ff;
+            touch-action: manipulation;
         }
 
-        /* Card Flip Animation Styles */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        
-        .transform-style-3d {
-            transform-style: preserve-3d;
-        }
-        
-        .backface-hidden {
-            backface-visibility: hidden;
-        }
-        
-        .rotate-y-180 {
-            transform: rotateY(180deg);
-        }
+        /* 3D Transform & Perspective */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
 
-        /* Custom Scrollbar for card content if text is long */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Prevent text selection during rapid clicking */
-        .no-select {
-            user-select: none;
-            -webkit-user-select: none;
+        .no-select { user-select: none; -webkit-user-select: none; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -60,378 +42,450 @@
     <!-- Header -->
     <header class="bg-blue-600 text-white p-4 shadow-md z-10">
         <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <h1 class="text-lg md:text-xl font-bold leading-tight">
+            <h1 class="text-xl md:text-2xl font-bold leading-tight">
                 中１理科 1分野<br class="md:hidden"> 3学期学年末対策
             </h1>
-            <div class="text-xs md:text-sm bg-blue-700 px-2 py-1 rounded">
-                Ver. <span id="app-version">1.2.0</span>
+            <div class="flex items-center space-x-2">
+                <button onclick="resetToMenu()" class="text-sm bg-blue-800 hover:bg-blue-700 text-white px-3 py-2 rounded transition-colors">
+                    メニューへ
+                </button>
+                <div class="text-sm md:text-base bg-blue-700 px-2 py-1 rounded">
+                    Ver. <span id="app-version">1.6.1</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="flex-1 relative w-full max-w-4xl mx-auto p-4 flex flex-col items-center justify-center">
 
-        <!-- SETUP SCREEN (Visible initially) -->
+        <!-- SETUP SCREEN -->
         <div id="setup-screen" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 md:p-8 space-y-6 transition-all duration-300 overflow-y-auto max-h-[80vh] custom-scrollbar">
             <div class="text-center">
-                <h2 class="text-2xl font-bold text-blue-600 mb-2">学習設定</h2>
-                <p class="text-slate-500 text-sm">範囲とモードを選んでスタート！</p>
+                <h2 class="text-3xl font-bold text-blue-600 mb-2">学習設定</h2>
+                <p class="text-slate-500 text-base">モードを選んでスタート！</p>
+            </div>
+
+            <!-- Quick Start Section (New) -->
+            <div class="space-y-3 pb-4 border-b border-slate-100">
+                <p class="font-bold text-base text-slate-700">実力テスト（ランダム出題）</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="startQuickMode('basic')" class="py-4 px-2 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 text-white font-bold shadow-md hover:shadow-lg hover:from-teal-500 hover:to-teal-700 transform hover:-translate-y-1 transition-all flex flex-col items-center justify-center group">
+                        <span class="text-lg md:text-xl">10問ランダム</span>
+                        <span class="text-xs opacity-90 mt-1 group-hover:opacity-100">第1・2章（知識）</span>
+                    </button>
+                    <button onclick="startQuickMode('calc')" class="py-4 px-2 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 text-white font-bold shadow-md hover:shadow-lg hover:from-rose-500 hover:to-rose-700 transform hover:-translate-y-1 transition-all flex flex-col items-center justify-center group">
+                        <span class="text-lg md:text-xl">5問ランダム</span>
+                        <span class="text-xs opacity-90 mt-1 group-hover:opacity-100">第3・4章（計算）</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Chapter Selection -->
             <div class="space-y-3">
-                <p class="font-bold text-sm text-slate-700">学習する章を選ぶ</p>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="selectChapter('all')" class="chapter-btn w-full py-3 px-4 rounded-lg border-2 border-blue-100 hover:border-blue-500 hover:bg-blue-50 transition-colors text-left flex justify-between items-center group active">
-                        <span class="font-bold text-blue-700">全範囲まとめ</span>
-                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full group-hover:bg-blue-200">105問</span>
+                <p class="font-bold text-base text-slate-700">じっくり学習する章を選ぶ</p>
+                <div class="grid grid-cols-1 gap-3">
+                    <button onclick="selectChapter('all')" class="chapter-btn w-full py-4 px-5 rounded-xl border-2 border-blue-100 hover:border-blue-500 hover:bg-blue-50 transition-colors text-left flex justify-between items-center group active">
+                        <span class="font-bold text-lg text-blue-700">全範囲まとめ</span>
+                        <span class="text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full group-hover:bg-blue-200">105問</span>
                     </button>
-                    <button onclick="selectChapter(1)" class="chapter-btn w-full py-3 px-4 rounded-lg border-2 border-slate-100 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left flex justify-between items-center group">
-                        <span class="font-bold text-slate-700">第1章：音の性質</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full group-hover:bg-emerald-200 group-hover:text-emerald-800">30問</span>
+                    <button onclick="selectChapter(1)" class="chapter-btn w-full py-4 px-5 rounded-xl border-2 border-slate-100 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left flex justify-between items-center group">
+                        <span class="font-bold text-lg text-slate-700">第1章：音の性質</span>
+                        <span class="text-sm bg-slate-100 text-slate-500 px-3 py-1 rounded-full group-hover:bg-emerald-200 group-hover:text-emerald-800">30問</span>
                     </button>
-                    <button onclick="selectChapter(2)" class="chapter-btn w-full py-3 px-4 rounded-lg border-2 border-slate-100 hover:border-orange-500 hover:bg-orange-50 transition-colors text-left flex justify-between items-center group">
-                        <span class="font-bold text-slate-700">第2章：力のはたらき</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full group-hover:bg-orange-200 group-hover:text-orange-800">30問</span>
+                    <button onclick="selectChapter(2)" class="chapter-btn w-full py-4 px-5 rounded-xl border-2 border-slate-100 hover:border-orange-500 hover:bg-orange-50 transition-colors text-left flex justify-between items-center group">
+                        <span class="font-bold text-lg text-slate-700">第2章：力のはたらき</span>
+                        <span class="text-sm bg-slate-100 text-slate-500 px-3 py-1 rounded-full group-hover:bg-orange-200 group-hover:text-orange-800">30問</span>
                     </button>
-                    <button onclick="selectChapter(3)" class="chapter-btn w-full py-3 px-4 rounded-lg border-2 border-slate-100 hover:border-pink-500 hover:bg-pink-50 transition-colors text-left flex justify-between items-center group">
-                        <span class="font-bold text-slate-700">第3章：音の性質（計算）</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full group-hover:bg-pink-200 group-hover:text-pink-800">15問</span>
+                    <button onclick="selectChapter(3)" class="chapter-btn w-full py-4 px-5 rounded-xl border-2 border-slate-100 hover:border-pink-500 hover:bg-pink-50 transition-colors text-left flex justify-between items-center group">
+                        <span class="font-bold text-lg text-slate-700">第3章：音の性質（計算）</span>
+                        <span class="text-sm bg-slate-100 text-slate-500 px-3 py-1 rounded-full group-hover:bg-pink-200 group-hover:text-pink-800">15問</span>
                     </button>
-                    <button onclick="selectChapter(4)" class="chapter-btn w-full py-3 px-4 rounded-lg border-2 border-slate-100 hover:border-purple-500 hover:bg-purple-50 transition-colors text-left flex justify-between items-center group">
-                        <span class="font-bold text-slate-700">第4章：力（計算）</span>
-                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded-full group-hover:bg-purple-200 group-hover:text-purple-800">30問</span>
+                    <button onclick="selectChapter(4)" class="chapter-btn w-full py-4 px-5 rounded-xl border-2 border-slate-100 hover:border-purple-500 hover:bg-purple-50 transition-colors text-left flex justify-between items-center group">
+                        <span class="font-bold text-lg text-slate-700">第4章：力（計算）</span>
+                        <span class="text-sm bg-slate-100 text-slate-500 px-3 py-1 rounded-full group-hover:bg-purple-200 group-hover:text-purple-800">30問</span>
                     </button>
                 </div>
             </div>
 
             <!-- Order Selection -->
             <div class="space-y-3">
-                <p class="font-bold text-sm text-slate-700">出題順</p>
-                <div class="flex space-x-2">
-                    <button onclick="setMode('sequential')" class="mode-btn active flex-1 py-2 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-700 font-bold text-sm transition-all">
+                <p class="font-bold text-base text-slate-700">出題順</p>
+                <div class="flex space-x-3">
+                    <button onclick="setMode('sequential')" class="mode-btn active flex-1 py-3 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-700 font-bold text-base transition-all">
                         順番通り
                     </button>
-                    <button onclick="setMode('random')" class="mode-btn flex-1 py-2 rounded-lg border-2 border-slate-200 text-slate-500 font-bold text-sm hover:border-blue-300 transition-all">
+                    <button onclick="setMode('random')" class="mode-btn flex-1 py-3 rounded-xl border-2 border-slate-200 text-slate-500 font-bold text-base hover:border-blue-300 transition-all">
                         ランダム
                     </button>
                 </div>
             </div>
 
-            <button onclick="startApp()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <button onclick="startApp()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xl py-5 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
                 学習スタート
             </button>
         </div>
 
-        <!-- STUDY SCREEN (Hidden initially) -->
+        <!-- STUDY SCREEN -->
         <div id="study-screen" class="hidden w-full h-full flex flex-col items-center justify-between py-2">
             
             <!-- Progress Bar -->
             <div class="w-full max-w-2xl mb-4 px-2">
-                <div class="flex justify-between text-xs text-slate-500 mb-1 font-mono">
+                <div class="flex justify-between text-sm text-slate-500 mb-1 font-mono">
                     <span id="progress-text">1 / 30</span>
                     <span id="chapter-badge">音の性質</span>
                 </div>
-                <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
-                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                    <div id="progress-bar" class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
             </div>
 
             <!-- Flashcard Area -->
             <div class="flex-1 w-full max-w-2xl perspective-1000 relative flex items-center justify-center mb-4">
-                <div id="card" class="w-full h-full max-h-[500px] bg-white rounded-2xl shadow-xl transform-style-3d transition-transform duration-500 cursor-pointer border border-slate-100" onclick="flipCard()">
+                <div id="card" class="w-full h-full max-h-[550px] bg-white rounded-3xl shadow-xl transform-style-3d transition-transform duration-500 cursor-pointer border border-slate-100" onclick="flipCard()">
                     
                     <!-- Front (Question) -->
-                    <div class="absolute w-full h-full backface-hidden flex flex-col p-6 md:p-10 items-center justify-center text-center bg-white rounded-2xl">
-                        <div class="absolute top-4 left-6 text-blue-500 font-bold tracking-widest text-sm uppercase">Question</div>
-                        <div class="flex-1 flex items-center justify-center w-full overflow-y-auto custom-scrollbar">
-                            <h3 id="question-text" class="text-xl md:text-2xl font-bold leading-relaxed text-slate-800">
-                                <!-- Question inserted here -->
+                    <div class="absolute w-full h-full backface-hidden flex flex-col p-6 md:p-8 items-center justify-center text-center bg-white rounded-3xl">
+                        <div class="absolute top-6 left-8 text-blue-500 font-bold tracking-widest text-base uppercase">Question</div>
+                        <div class="flex-1 flex items-center justify-center w-full overflow-y-auto custom-scrollbar px-2">
+                            <h3 id="question-text" class="font-bold leading-snug text-slate-800 transition-all duration-300">
+                                <!-- Question inserted here dynamically -->
                             </h3>
                         </div>
-                        <p class="mt-4 text-slate-400 text-xs animate-pulse">タップして答えを表示</p>
+                        <p class="mt-4 text-slate-400 text-sm animate-pulse">タップして答えを表示</p>
                     </div>
 
-                    <!-- Back (Answer) -->
-                    <div class="absolute w-full h-full backface-hidden rotate-y-180 flex flex-col p-6 md:p-10 items-center justify-center text-center bg-indigo-50 rounded-2xl border-2 border-indigo-100">
-                        <div class="absolute top-4 left-6 text-indigo-500 font-bold tracking-widest text-sm uppercase">Answer</div>
-                        <div class="flex-1 flex items-center justify-center w-full overflow-y-auto custom-scrollbar">
-                            <p id="answer-text" class="text-xl md:text-3xl font-bold text-indigo-700 leading-relaxed">
-                                <!-- Answer inserted here -->
-                            </p>
+                    <!-- Back (Answer & Explanation) -->
+                    <div class="absolute w-full h-full backface-hidden rotate-y-180 flex flex-col p-6 md:p-8 text-center bg-indigo-50 rounded-3xl border-2 border-indigo-100">
+                        <div class="absolute top-6 left-8 text-indigo-500 font-bold tracking-widest text-base uppercase">Answer</div>
+                        
+                        <!-- Answer Area -->
+                        <div class="flex-1 flex flex-col items-center justify-center w-full overflow-y-auto custom-scrollbar">
+                            
+                            <!-- Main Answer -->
+                            <div class="w-full flex items-center justify-center mb-4 min-h-[40%]">
+                                <p id="answer-text" class="font-bold text-indigo-700 leading-snug transition-all duration-300">
+                                    <!-- Answer inserted here dynamically -->
+                                </p>
+                            </div>
+
+                            <!-- Explanation Area -->
+                            <div id="explanation-container" class="w-full bg-white rounded-xl p-4 shadow-sm border border-indigo-100 mt-2 text-left">
+                                <p class="text-xs text-slate-400 font-bold mb-1">解説 / 計算式</p>
+                                <p id="explanation-text" class="text-base md:text-lg text-slate-700 font-medium leading-relaxed whitespace-pre-wrap">
+                                    <!-- Explanation inserted here -->
+                                </p>
+                            </div>
+
                         </div>
+                        <p class="mt-2 text-slate-400 text-xs md:hidden">↓ 下のボタンで判定 ↓</p>
                     </div>
 
                 </div>
             </div>
 
             <!-- Controls -->
-            <div class="w-full max-w-2xl grid grid-cols-2 gap-4 px-2 no-select">
-                <button onclick="resetToMenu()" class="py-3 px-6 rounded-xl bg-slate-200 text-slate-600 font-bold hover:bg-slate-300 transition-colors">
-                    メニュー
-                </button>
-                <button onclick="nextCard()" id="next-btn" class="py-3 px-6 rounded-xl bg-blue-600 text-white font-bold shadow-lg hover:bg-blue-700 active:transform active:scale-95 transition-all">
-                    次の問題へ
-                </button>
+            <div id="controls-area" class="w-full max-w-2xl h-24 px-2 no-select flex items-center justify-center">
+                <div id="front-controls" class="text-slate-400 text-base font-bold animate-pulse">
+                    カードをタップしてめくる
+                </div>
+
+                <div id="back-controls" class="hidden w-full grid grid-cols-2 gap-4">
+                    <button onclick="handleResult('review')" class="py-4 px-4 rounded-xl bg-amber-100 text-amber-700 font-bold border-2 border-amber-200 hover:bg-amber-200 active:transform active:scale-95 transition-all flex flex-col items-center justify-center leading-none">
+                        <span class="text-lg md:text-xl">まだ不安</span>
+                        <span class="text-xs md:text-sm opacity-70 mt-1">（あとで復習）</span>
+                    </button>
+                    <button onclick="handleResult('mastered')" class="py-4 px-4 rounded-xl bg-blue-600 text-white font-bold shadow-lg hover:bg-blue-700 active:transform active:scale-95 transition-all flex flex-col items-center justify-center leading-none">
+                        <span class="text-lg md:text-xl">覚えた！</span>
+                        <span class="text-xs md:text-sm opacity-70 mt-1">（次へ）</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- COMPLETION SCREEN -->
         <div id="completion-screen" class="hidden w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center space-y-6">
-            <div class="text-6xl mb-4">🎉</div>
-            <h2 class="text-2xl font-bold text-slate-800">学習完了！</h2>
-            <p class="text-slate-600">
-                お疲れ様でした。<br>
-                <span id="completion-msg" class="font-bold text-blue-600"></span>
-            </p>
-            <div class="bg-blue-50 p-4 rounded-lg">
-                <p class="text-sm text-slate-500">今回の学習数</p>
-                <p class="text-3xl font-bold text-blue-600"><span id="total-count">0</span> 問</p>
+            <div class="text-8xl mb-4" id="completion-emoji">🎉</div>
+            <h2 class="text-3xl font-bold text-slate-800" id="completion-title">学習完了！</h2>
+            <p class="text-lg text-slate-600" id="completion-msg">お疲れ様でした。</p>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-blue-50 p-4 rounded-xl">
+                    <p class="text-sm text-slate-500">今回の学習数</p>
+                    <p class="text-4xl font-bold text-blue-600"><span id="total-count">0</span> 問</p>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-xl">
+                    <p class="text-sm text-slate-500">復習が必要</p>
+                    <p class="text-4xl font-bold text-amber-600"><span id="review-count">0</span> 問</p>
+                </div>
             </div>
-            <button onclick="resetToMenu()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors">
-                もう一度やる
-            </button>
+
+            <div class="space-y-3 pt-4">
+                <button id="btn-start-review" onclick="startReviewMode()" class="hidden w-full bg-amber-500 text-white font-bold text-xl py-4 rounded-xl hover:bg-amber-600 shadow-lg transform hover:-translate-y-1 transition-all">
+                    不安な問題を復習する
+                </button>
+                <button onclick="resetToMenu()" class="w-full bg-slate-100 text-slate-600 font-bold text-lg py-4 rounded-xl hover:bg-slate-200 transition-colors">
+                    メニューに戻る
+                </button>
+            </div>
         </div>
 
     </main>
 
-    <footer class="text-center p-4 text-slate-400 text-xs">
+    <footer class="text-center p-4 text-slate-400 text-sm">
         &copy; 2024 Junior High Science App | Built for Students
     </footer>
 
     <!-- Application Logic -->
     <script>
-        // --- APP CONFIGURATION ---
-        const APP_VERSION = "1.2.0"; // 更新時はここを変更するだけ
+        const APP_VERSION = "1.6.1";
         
-        // --- DATA ---
-        // 1: 音の性質, 2: 力のはたらき, 3: 音の性質（計算）, 4: 力（計算）
+        // --- DATA (Answer split into 'a': Answer and 'e': Explanation) ---
         const masterData = [
             // 第1章：音の性質
-            { c: 1, q: "音の振動の振れ幅を何といいますか？", a: "振幅" },
-            { c: 1, q: "振幅が大きくなると、音はどうなりますか？", a: "大きくなる" },
-            { c: 1, q: "音源が1秒間に振動する回数を何といいますか？", a: "振動数" },
-            { c: 1, q: "振動数が多くなると、音の高さはどうなりますか？", a: "高くなる" },
-            { c: 1, q: "振動数の単位は何ですか？", a: "Hz（ヘルツ）" },
-            { c: 1, q: "音が出ているとき、音源の物体はどうなっていますか？", a: "振動している" },
-            { c: 1, q: "空気中を伝わる音の速さは、およそ毎秒何mですか？", a: "約340m/s" },
-            { c: 1, q: "光と音では、どちらが伝わる速さが速いですか？", a: "光" },
-            { c: 1, q: "花火が見えてから音が聞こえるまでに時間がかかるのはなぜですか？", a: "光の速さに比べて、音の速さが非常に遅いから" },
-            { c: 1, q: "音を伝える物質がない真空の中では、音は聞こえますか？", a: "聞こえない" },
-            { c: 1, q: "モノコードの弦をより強く張ると、音の高さはどうなりますか？", a: "高くなる" },
-            { c: 1, q: "モノコードの弦をより細いものに変えると、音の高さはどうなりますか？", a: "高くなる" },
-            { c: 1, q: "モノコードの駒を動かして弦の長さを短くすると、音の高さはどうなりますか？", a: "高くなる" },
-            { c: 1, q: "弦を強くはじくと、音の大きさはどうなりますか？", a: "大きくなる" },
-            { c: 1, q: "オシロスコープの波形で、音の大きさを表すのは縦・横どちらの幅ですか？", a: "縦の幅（振幅）" },
-            { c: 1, q: "オシロスコープの波形で、音の高さに関係するのは縦・横どちらの幅ですか？", a: "横の幅（振動の感覚）" },
-            { c: 1, q: "振動数が多くなると、波形の山の数はどうなりますか？", a: "多く（密に）なる" },
-            { c: 1, q: "高い壁に向かって声を出したとき、はね返って聞こえる音を何といいますか？", a: "こだま（やまびこ）" },
-            { c: 1, q: "音が水面にふれると、水面はどうなりますか？", a: "水しぶきが上がる（振動が伝わる）" },
-            { c: 1, q: "容器内の空気を抜いていくと、中のブザーの音はどうなりますか？", a: "小さくなる（聞こえなくなる）" },
-            { c: 1, q: "波形で、山から次の山までの1往復の時間を何といいますか？", a: "1回の振動にかかる時間" },
-            { c: 1, q: "振幅が半分になると、音の大きさはどうなりますか？", a: "小さくなる" },
-            { c: 1, q: "振動数が2倍になると、音の高さはどうなりますか？", a: "高くなる" },
-            { c: 1, q: "同じ高さで大きな音と小さな音では、波形の何が違いますか？", a: "振幅（波の高さ）" },
-            { c: 1, q: "同じ大きさで高い音と低い音では、波形の何が違いますか？", a: "波の数（または波の横幅）" },
-            { c: 1, q: "モノコードで、弦を太くすると振動数はどうなりますか？", a: "少なくなる（低くなる）" },
-            { c: 1, q: "弦をはじく強さを変えても変わらないのは、音の大きさ・高さのどちらですか？", a: "音の高さ" },
-            { c: 1, q: "打ち上げ花火の音が、光ってから3秒後に聞こえた場合、距離は何mですか（340m/sとする）？", a: "1020m" },
-            { c: 1, q: "音の波形をコンピュータで調べるとき、マイクは何のために使いますか？", a: "音（振動）を取り込むため" },
-            { c: 1, q: "振動数が120Hzの音は、1秒間に何回振動していますか？", a: "120回" },
+            { c: 1, q: "音の振動の振れ幅を何といいますか？", a: "振幅", e: "振幅は音の大きさに関係します。" },
+            { c: 1, q: "振幅が大きくなると、音はどうなりますか？", a: "大きくなる", e: "逆に振幅が小さいと音は小さくなります。" },
+            { c: 1, q: "音源が1秒間に振動する回数を何といいますか？", a: "振動数", e: "音の高さに関係します。" },
+            { c: 1, q: "振動数が多くなると、音の高さはどうなりますか？", a: "高くなる", e: "振動数が少ないと低い音になります。" },
+            { c: 1, q: "振動数の単位は何ですか？", a: "Hz（ヘルツ）", e: "1秒間に100回振動すれば100Hzです。" },
+            { c: 1, q: "音が出ているとき、音源の物体はどうなっていますか？", a: "振動している", e: "震えていないと音は出ません。" },
+            { c: 1, q: "空気中を伝わる音の速さは、およそ毎秒何mですか？", a: "約340m/s", e: "気温15℃のとき約340m/sです。" },
+            { c: 1, q: "光と音では、どちらが伝わる速さが速いですか？", a: "光", e: "光は30万km/sと圧倒的に速いです。" },
+            { c: 1, q: "花火が見えてから音が聞こえるまでに時間がかかるのはなぜですか？", a: "光の速さに比べて、音の速さが非常に遅いから", e: "光は一瞬で届きますが、音は遅れて届きます。" },
+            { c: 1, q: "音を伝える物質がない真空の中では、音は聞こえますか？", a: "聞こえない", e: "音は空気が振動して伝わるため、空気がないと伝わりません。" },
+            { c: 1, q: "モノコードの弦をより強く張ると、音の高さはどうなりますか？", a: "高くなる", e: "弦をピンと張るほど、振動数が多くなります。" },
+            { c: 1, q: "モノコードの弦をより細いものに変えると、音の高さはどうなりますか？", a: "高くなる", e: "細い弦や軽い弦は振動しやすいです。" },
+            { c: 1, q: "モノコードの駒を動かして弦の長さを短くすると、音の高さはどうなりますか？", a: "高くなる", e: "短い弦は速く振動します。" },
+            { c: 1, q: "弦を強くはじくと、音の大きさはどうなりますか？", a: "大きくなる", e: "大きくはじくと振幅が大きくなります。" },
+            { c: 1, q: "オシロスコープの波形で、音の大きさを表すのは縦・横どちらの幅ですか？", a: "縦の幅（振幅）", e: "波の高さが高いほど大きな音です。" },
+            { c: 1, q: "オシロスコープの波形で、音の高さに関係するのは縦・横どちらの幅ですか？", a: "横の幅（振動の感覚）", e: "波の間隔が狭い（数が多い）ほど高い音です。" },
+            { c: 1, q: "振動数が多くなると、波形の山の数はどうなりますか？", a: "多く（密に）なる", e: "同じ時間内にたくさんの波が入ります。" },
+            { c: 1, q: "高い壁に向かって声を出したとき、はね返って聞こえる音を何といいますか？", a: "こだま（やまびこ）", e: "音の反射による現象です。" },
+            { c: 1, q: "音が水面にふれると、水面はどうなりますか？", a: "水しぶきが上がる", e: "音の振動が水に伝わるからです。" },
+            { c: 1, q: "容器内の空気を抜いていくと、中のブザーの音はどうなりますか？", a: "小さくなる（聞こえなくなる）", e: "伝える物質（空気）が減るためです。" },
+            { c: 1, q: "波形で、山から次の山までの1往復の時間を何といいますか？", a: "1回の振動にかかる時間", e: "周期とも呼びます。" },
+            { c: 1, q: "振幅が半分になると、音の大きさはどうなりますか？", a: "小さくなる", e: "振幅は音の大きさの要素です。" },
+            { c: 1, q: "振動数が2倍になると、音の高さはどうなりますか？", a: "高くなる", e: "1オクターブ高くなります。" },
+            { c: 1, q: "同じ高さで大きな音と小さな音では、波形の何が違いますか？", a: "振幅（波の高さ）", e: "高さが同じなら波の数は同じです。" },
+            { c: 1, q: "同じ大きさで高い音と低い音では、波形の何が違いますか？", a: "波の数（または波の横幅）", e: "大きさが同じなら振幅は同じです。" },
+            { c: 1, q: "モノコードで、弦を太くすると振動数はどうなりますか？", a: "少なくなる（低くなる）", e: "太い弦は振動しにくいためです。" },
+            { c: 1, q: "弦をはじく強さを変えても変わらないのは、音の大きさ・高さのどちらですか？", a: "音の高さ", e: "強さは大きさを変えますが、高さは変わりません。" },
+            { c: 1, q: "打ち上げ花火の音が、光ってから3秒後に聞こえた場合、距離は何mですか（340m/sとする）？", a: "1020m", e: "式：340m/s × 3s = 1020m" },
+            { c: 1, q: "音の波形をコンピュータで調べるとき、マイクは何のために使いますか？", a: "音（振動）を取り込むため", e: "空気の振動を電気信号に変えます。" },
+            { c: 1, q: "振動数が120Hzの音は、1秒間に何回振動していますか？", a: "120回", e: "Hzは1秒間の振動回数です。" },
 
             // 第2章：力のはたらき
-            { c: 2, q: "地球がその中心に向かって物体を引く力を何といいますか？", a: "重力" },
-            { c: 2, q: "変形した物体がもとに戻ろうとするときに発生する力を何といいますか？", a: "弾性力" },
-            { c: 2, q: "ふれ合っている物体の間に働き、動きを妨げようとする力を何といいますか？", a: "摩擦力" },
-            { c: 2, q: "机の上に置いた物体を、机が支える上向きの力を何といいますか？", a: "垂直抗力" },
-            { c: 2, q: "磁石の極どうしが引き合ったり退け合ったりする力を何といいますか？", a: "磁気（磁石）の力" },
-            { c: 2, q: "たまった電気が、物体を引きつけたり退け合ったりする力を何といいますか？", a: "電気の力" },
-            { c: 2, q: "力の大きさの単位は何ですか？", a: "ニュートン" },
-            { c: 2, q: "ニュートンの記号は何ですか？", a: "N" },
-            { c: 2, q: "「ばねののびは、ばねにはたらく力の大きさに比例する」という法則を何といいますか？", a: "フックの法則" },
-            { c: 2, q: "ばねにはたらく力の大きさを2倍にすると、ばねののびは何倍になりますか？", a: "2倍" },
-            { c: 2, q: "力の3要素をすべて挙げてください。", a: "力の大きさ、力の向き、作用点" },
-            { c: 2, q: "力がはたらく点を何といいますか？", a: "作用点" },
-            { c: 2, q: "物体にはたらく重力の大きさを何といいますか？", a: "重さ" },
-            { c: 2, q: "場所によって変わることのない、物体そのものの量を何といいますか？", a: "質量" },
-            { c: 2, q: "質量をはかるのに適した道具は何ですか？", a: "上皿てんびん" },
-            { c: 2, q: "重さをはかるのに適した道具は何ですか？", a: "ばねばかり" },
-            { c: 2, q: "重さは場所によって変化しますか、しませんか？", a: "変化する" },
-            { c: 2, q: "質量は場所によって変化しますか、しませんか？", a: "変化しない" },
-            { c: 2, q: "1つの物体に2つの力がはたらき、物体が動かないとき、2つの力はどのような状態ですか？", a: "つり合っている" },
-            { c: 2, q: "2つの力がつり合うための条件を3つ挙げてください。", a: "大きさが等しい、向きが反対、一直線上にある" },
-            { c: 2, q: "力の大きさを表す矢印の長さは何に比例させますか？", a: "力の大きさ" },
-            { c: 2, q: "力の向きを表す矢印の向きは何に一致させますか？", a: "力の向き" },
-            { c: 2, q: "重力の作用点は、通常どこにありますか？", a: "物体の中心" },
-            { c: 2, q: "糸がおもりを引く力と、おもりにはたらく重力がつり合っているとき、おもりはどうなりますか？", a: "静止する" },
-            { c: 2, q: "磁石の力のように、離れていてもはたらく力は他に何がありますか？", a: "重力、電気の力" },
-            { c: 2, q: "垂直抗力は、面に対してどのような向きにはたらきますか？", a: "垂直な向き" },
-            { c: 2, q: "物体の形を変える、動きを変える、支えるといったことをまとめて何といいますか？", a: "力のはたらき" },
-            { c: 2, q: "フックの法則のグラフは、どのような線になりますか？", a: "原点を通る直線" },
-            { c: 2, q: "2つの力の作用線が一致していない場合、それらの力はつり合いますか？", a: "つり合わない" },
-            { c: 2, q: "手が物体を押す力と、物体が動かないときにはたらく摩擦力の大きさの関係はどうなっていますか？", a: "等しい（つり合っている）" },
+            { c: 2, q: "地球がその中心に向かって物体を引く力を何といいますか？", a: "重力", e: "地球上にあるすべての物体にはたらきます。" },
+            { c: 2, q: "変形した物体がもとに戻ろうとするときに発生する力を何といいますか？", a: "弾性力", e: "ばねやゴムなどが持つ力です。" },
+            { c: 2, q: "ふれ合っている物体の間に働き、動きを妨げようとする力を何といいますか？", a: "摩擦力", e: "動かそうとする向きと逆向きにはたらきます。" },
+            { c: 2, q: "机の上に置いた物体を、机が支える上向きの力を何といいますか？", a: "垂直抗力", e: "面に垂直にはたらく力です。" },
+            { c: 2, q: "磁石の極どうしが引き合ったり退け合ったりする力を何といいますか？", a: "磁気（磁石）の力", e: "N極とS極は引き合い、同じ極は退け合います。" },
+            { c: 2, q: "たまった電気が、物体を引きつけたり退け合ったりする力を何といいますか？", a: "電気の力", e: "下敷きで髪をこすった時などに発生します。" },
+            { c: 2, q: "力の大きさの単位は何ですか？", a: "ニュートン", e: "記号はNを使います。" },
+            { c: 2, q: "ニュートンの記号は何ですか？", a: "N", e: "約100gの物体にはたらく重力が1Nです。" },
+            { c: 2, q: "「ばねののびは、ばねにはたらく力の大きさに比例する」という法則を何といいますか？", a: "フックの法則", e: "グラフにすると原点を通る直線になります。" },
+            { c: 2, q: "ばねにはたらく力の大きさを2倍にすると、ばねののびは何倍になりますか？", a: "2倍", e: "力とのびは比例関係にあります。" },
+            { c: 2, q: "力の3要素をすべて挙げてください。", a: "力の大きさ、力の向き、作用点", e: "矢印で表すときに重要な3つの要素です。" },
+            { c: 2, q: "力がはたらく点を何といいますか？", a: "作用点", e: "矢印の書き始め（始点）になります。" },
+            { c: 2, q: "物体にはたらく重力の大きさを何といいますか？", a: "重さ", e: "場所（月面など）によって変わります。" },
+            { c: 2, q: "場所によって変わることのない、物体そのものの量を何といいますか？", a: "質量", e: "単位はgやkgを使います。" },
+            { c: 2, q: "質量をはかるのに適した道具は何ですか？", a: "上皿てんびん", e: "電子てんびんでもはかれます。" },
+            { c: 2, q: "重さをはかるのに適した道具は何ですか？", a: "ばねばかり", e: "ばねののびを利用して重力（重さ）をはかります。" },
+            { c: 2, q: "重さは場所によって変化しますか、しませんか？", a: "変化する", e: "月面では地球の約1/6になります。" },
+            { c: 2, q: "質量は場所によって変化しますか、しませんか？", a: "変化しない", e: "どこに行っても物体そのものの量は変わりません。" },
+            { c: 2, q: "1つの物体に2つの力がはたらき、物体が動かないとき、2つの力はどのような状態ですか？", a: "つり合っている", e: "綱引きで勝負がつかない状態です。" },
+            { c: 2, q: "2つの力がつり合うための条件を3つ挙げてください。", a: "大きさが等しい\n向きが反対\n一直線上にある", e: "この3つが揃って初めてつり合います。" },
+            { c: 2, q: "力の大きさを表す矢印の長さは何に比例させますか？", a: "力の大きさ", e: "力が大きいほど矢印を長く書きます。" },
+            { c: 2, q: "力の向きを表す矢印の向きは何に一致させますか？", a: "力の向き", e: "力がはたらく方向に矢印を向けます。" },
+            { c: 2, q: "重力の作用点は、通常どこにありますか？", a: "物体の中心", e: "重心ともいいます。" },
+            { c: 2, q: "糸がおもりを引く力と、おもりにはたらく重力がつり合っているとき、おもりはどうなりますか？", a: "静止する", e: "力がつり合うと動き出しません。" },
+            { c: 2, q: "磁石の力のように、離れていてもはたらく力は他に何がありますか？", a: "重力、電気の力", e: "これらは接触していなくても力が及びます。" },
+            { c: 2, q: "垂直抗力は、面に対してどのような向きにはたらきますか？", a: "垂直な向き", e: "面から押し返される方向です。" },
+            { c: 2, q: "物体の形を変える、動きを変える、支えるといったことをまとめて何といいますか？", a: "力のはたらき", e: "力が持つ3つの作用です。" },
+            { c: 2, q: "フックの法則のグラフは、どのような線になりますか？", a: "原点を通る直線", e: "比例のグラフになります。" },
+            { c: 2, q: "2つの力の作用線が一致していない場合、それらの力はつり合いますか？", a: "つり合わない", e: "物体は回転してしまいます。" },
+            { c: 2, q: "手が物体を押す力と、物体が動かないときにはたらく摩擦力の大きさの関係はどうなっていますか？", a: "等しい", e: "動かない＝力がつり合っているからです。" },
 
             // 第3章：音の性質（計算問題）
-            { c: 3, q: "打ち上げ花火が光ってから4秒後に音が聞こえました。音の速さを340m/sとすると、花火が開いた地点までの距離は何mですか？", a: "1360m （340m/s × 4s = 1360m）" },
-            { c: 3, q: "雷が光ってから3.4秒後に音が聞こえました。音の速さを340m/sとすると、落雷地点までの距離は何mですか？", a: "1156m （340m/s × 3.4s = 1156m）" },
-            { c: 3, q: "171m離れた地点で太鼓をたたいた音が0.5秒後に聞こえたとき、音の伝わった速さは何m/sですか？", a: "342m/s （171m ÷ 0.5s = 342m/s）" },
-            { c: 3, q: "花火の地点から2040m離れた場所で、花火が光ってから音が聞こえるまでにかかる時間は何秒ですか？（音速は340m/sとする）", a: "6秒 （2040m ÷ 340m/s = 6s）" },
-            { c: 3, q: "山頂で叫んだ声の「やまびこ」が4.4秒後に聞こえました。音の速さを340m/sとすると、反射した山までの距離は何mですか？", a: "748m （340m/s × 4.4s ÷ 2 = 748m）" },
-            { c: 3, q: "船から海底へ音を出し、0.4秒後に反射音が戻ってきました。海底までの深さが300mのとき、海中の音の速さは何m/sですか？", a: "1500m/s （300m × 2 ÷ 0.4s = 1500m/s）" },
-            { c: 3, q: "壁から500m離れたAさんが大声を出し、その360m後ろにいるBさんが壁からの反射音を聞きました。音が伝わった距離（A→壁→B）は何mですか？", a: "1360m （500m + 500m + 360m = 1360m）" },
-            { c: 3, q: "前問の設定で、Bさんが反射音を聞くまでに4秒かかったとき、音の速さは何m/sですか？", a: "340m/s （1360m ÷ 4s = 340m/s）" },
-            { c: 3, q: "1秒間に30コマ記録するビデオカメラで花火を撮影した際、光ってから音が記録されるまで70コマかかりました。花火までの距離は何mですか？（音速340m/s、四捨五入して整数で）", a: "793m （70/30秒 × 340m/s ≒ 793.3...m）" },
-            { c: 3, q: "音の波形において、1回の振動にかかる時間が0.005秒であるとき、この音の振動数は何Hzですか？", a: "200Hz （1 ÷ 0.005s = 200Hz）" },
-            { c: 3, q: "オシロスコープの1目盛りが0.001秒のとき、1回の振動に4目盛りかかる音の振動数は何Hzですか？", a: "250Hz （1 ÷ 0.004s = 250Hz）" },
-            { c: 3, q: "振動数が120Hzの音（波形ア）と、同じ時間内にその3倍の数の波が記録された音（波形イ）があるとき、音イの振動数は何Hzですか？", a: "360Hz （120Hz × 3 = 360Hz）" },
-            { c: 3, q: "400Hzの音の波形に対して、同じ時間幅の中に1.5倍の数の波がある別の音の振動数は何Hzですか？", a: "600Hz （400Hz × 1.5 = 600Hz）" },
-            { c: 3, q: "校舎の壁から10m離れた地点で音を出し、壁で反射した音との時間間隔が0.058秒でした。このときの音の速さは何m/sですか？（四捨五入して整数で）", a: "345m/s （10m × 2 ÷ 0.058s ≒ 344.8...m/s）" },
-            { c: 3, q: "音の速さを測る実験を3回行い、時間が0.39秒、0.40秒、0.41秒でした。138mの距離を伝わった平均の音速は何m/sですか？", a: "345m/s （平均時間0.40秒、138m ÷ 0.40s = 345m/s）" },
+            { c: 3, q: "打ち上げ花火が光ってから4秒後に音が聞こえました。音の速さを340m/sとすると、花火が開いた地点までの距離は何mですか？", a: "1360m", e: "式：340m/s × 4s = 1360m\n(速さ × 時間 = 距離)" },
+            { c: 3, q: "雷が光ってから3.4秒後に音が聞こえました。音の速さを340m/sとすると、落雷地点までの距離は何mですか？", a: "1156m", e: "式：340m/s × 3.4s = 1156m\n(速さ × 時間 = 距離)" },
+            { c: 3, q: "171m離れた地点で太鼓をたたいた音が0.5秒後に聞こえたとき、音の伝わった速さは何m/sですか？", a: "342m/s", e: "式：171m ÷ 0.5s = 342m/s\n(距離 ÷ 時間 = 速さ)" },
+            { c: 3, q: "花火の地点から2040m離れた場所で、花火が光ってから音が聞こえるまでにかかる時間は何秒ですか？（音速は340m/sとする）", a: "6秒", e: "式：2040m ÷ 340m/s = 6s\n(距離 ÷ 速さ = 時間)" },
+            { c: 3, q: "山頂で叫んだ声の「やまびこ」が4.4秒後に聞こえました。音の速さを340m/sとすると、反射した山までの距離は何mですか？", a: "748m", e: "式：340m/s × 4.4s ÷ 2 = 748m\n(往復の時間なので2で割ります)" },
+            { c: 3, q: "船から海底へ音を出し、0.4秒後に反射音が戻ってきました。海底までの深さが300mのとき、海中の音の速さは何m/sですか？", a: "1500m/s", e: "式：(300m × 2) ÷ 0.4s = 1500m/s\n(往復距離 ÷ 往復時間 = 速さ)" },
+            { c: 3, q: "壁から500m離れたAさんが大声を出し、その360m後ろにいるBさんが壁からの反射音を聞きました。音が伝わった距離（A→壁→B）は何mですか？", a: "1360m", e: "式：500m(往路) + 500m(復路) + 360m = 1360m" },
+            { c: 3, q: "前問の設定で、Bさんが反射音を聞くまでに4秒かかったとき、音の速さは何m/sですか？", a: "340m/s", e: "式：1360m ÷ 4s = 340m/s" },
+            { c: 3, q: "1秒間に30コマ記録するビデオカメラで花火を撮影した際、光ってから音が記録されるまで70コマかかりました。花火までの距離は何mですか？（音速340m/s、四捨五入して整数で）", a: "793m", e: "時間：70 ÷ 30 = 7/3秒\n式：340m/s × 7/3s ≒ 793.33...m" },
+            { c: 3, q: "音の波形において、1回の振動にかかる時間が0.005秒であるとき、この音の振動数は何Hzですか？", a: "200Hz", e: "式：1 ÷ 0.005s = 200Hz\n(1秒間に何回振動が入るか計算します)" },
+            { c: 3, q: "オシロスコープの1目盛りが0.001秒のとき、1回の振動に4目盛りかかる音の振動数は何Hzですか？", a: "250Hz", e: "1回の時間：0.001s × 4 = 0.004s\n式：1 ÷ 0.004s = 250Hz" },
+            { c: 3, q: "振動数が120Hzの音（波形ア）と、同じ時間内にその3倍の数の波が記録された音（波形イ）があるとき、音イの振動数は何Hzですか？", a: "360Hz", e: "式：120Hz × 3 = 360Hz\n(波の数が多いほど振動数は大きい)" },
+            { c: 3, q: "400Hzの音の波形に対して、同じ時間幅の中に1.5倍の数の波がある別の音の振動数は何Hzですか？", a: "600Hz", e: "式：400Hz × 1.5 = 600Hz" },
+            { c: 3, q: "校舎の壁から10m離れた地点で音を出し、壁で反射した音との時間間隔が0.058秒でした。このときの音の速さは何m/sですか？（四捨五入して整数で）", a: "345m/s", e: "往復距離：10m × 2 = 20m\n式：20m ÷ 0.058s ≒ 344.8...m/s" },
+            { c: 3, q: "音の速さを測る実験を3回行い、時間が0.39秒、0.40秒、0.41秒でした。138mの距離を伝わった平均の音速は何m/sですか？", a: "345m/s", e: "平均時間：(0.39+0.40+0.41) ÷ 3 = 0.40秒\n式：138m ÷ 0.40s = 345m/s" },
 
-            // 第4章：力のはたらき（計算） -- 旧第3章
-            { c: 4, q: "地球上で質量100gの物体にはたらく重力の大きさは約何Nですか？", a: "約1N" },
-            { c: 4, q: "地球上で質量300gの物体にはたらく重力の大きさは何Nですか？", a: "3N" },
-            { c: 4, q: "質量2kgの物体にはたらく重力の大きさは何Nですか？（100g=1Nとする）", a: "20N" },
-            { c: 4, q: "0.1Nの力で1cmのびるばねに、0.4Nの力を加えると何cmのびますか？", a: "4cm" },
-            { c: 4, q: "1Nで2cmのびるばねに3Nの力を加えると、のびは何cmになりますか？", a: "6cm" },
-            { c: 4, q: "月の重力は地球の約何分の1ですか？", a: "6分の1" },
-            { c: 4, q: "地球上で質量60gの物体の質量は、月面上では何gですか？", a: "60g" },
-            { c: 4, q: "地球上で重さ0.6Nの物体の重さは、月面上では何Nになりますか？", a: "0.1N" },
-            { c: 4, q: "月面上で180gの物体をばねばかりでつるすと、何Nを示しますか？", a: "0.3N" },
-            { c: 4, q: "元の長さが6.0cmのばねに100gのおもりをつるすと全長が6.8cmになりました。200gのおもりをつるすと全長は何cmになりますか？", a: "7.6cm" },
-            { c: 4, q: "ばねののびが2.5cmのとき、おもりの質量は何gですか？（0.1Nで1cmのびる場合）", a: "250g" },
-            { c: 4, q: "図で1Nを1cmの矢印で表すとき、3Nの力は何cmの矢印で書きますか？", a: "3cm" },
-            { c: 4, q: "机の上に置いた5Nの物体に、机から受ける垂直抗力は何Nですか？", a: "5N" },
-            { c: 4, q: "床に置いた物体を1.5Nで水平に押したが動かなかった。このときの摩擦力は何Nですか？", a: "1.5N" },
-            { c: 4, q: "2本のばねA, Bを縦につなぎ、下端に0.6Nのおもりを吊るした。それぞれのばねが受ける力は何Nですか？", a: "ともに0.6N" },
-            { c: 4, q: "0.1Nで1cmのびるばねA, Bを並列に並べて棒で吊るし、棒の中央に0.6Nのおもりを下げた。各ばねののびは何cmですか？", a: "3cm" },
-            { c: 4, q: "300gの物体をばねでゆっくり引き上げ、ばねが6cmのびたところで床から離れた。このばねを5cmのばすのに必要な力は何Nですか？", a: "2.5N" },
-            { c: 4, q: "前問で、ばねののびが2cmのとき、物体が床を押す力は何Nですか？", a: "2N" },
-            { c: 4, q: "100gで2cmのびるばねに、あるおもりを吊るすと8cmのびた。おもりの質量は何gですか？", a: "400g" },
-            { c: 4, q: "質量150gの物体が月面上で上皿てんびんに乗っている。反対側には何gの分銅を乗せればつり合いますか？", a: "150g" },
-            { c: 4, q: "0.5Nで0.8cmのびるばねに、350gのおもりを吊るすと何cmのびますか？", a: "5.6cm" },
-            { c: 4, q: "元の長さが12.0cmで、0.4Nで0.2cmのびるばねに160gのおもりを吊るしたときの全長は何cmですか？", a: "12.8cm" },
-            { c: 4, q: "グラフで、0.2Nでばねののびが2.0cmのとき、このばねの比例定数（1Nあたりののび）は何cm/Nですか？", a: "10cm/N" },
-            { c: 4, q: "400gの物体を月面上でばねばかりに吊るすと、地球上の何gの物体と同じ値を示しますか？", a: "約66.7g（400÷6）" },
-            { c: 4, q: "力の大きさが4Nのとき、反対向きに何Nの力を加えればつり合いますか？", a: "4N" },
-            { c: 4, q: "500gの物体を台ばかりに乗せ、ばねで上に引いた。ばねののびが3.6cm（1Nで1cmのびる）のとき、台ばかりの示す値は何gですか？", a: "140g" },
-            { c: 4, q: "前問で、台ばかりの値が150gになったとき、ばねののびは何cmですか？", a: "3.5cm" },
-            { c: 4, q: "20gのおもり1個で2cmのびるばねに、120gのおもりを吊るすと何cmのびますか？", a: "12cm" },
-            { c: 4, q: "前問のばねで、全長が26cmになったとき（元の長さ20cm）、おもりがばねを引く力は何Nですか？", a: "0.6N" },
-            { c: 4, q: "方眼の1目盛りが3Nを表すとき、15Nの力を表す矢印は何目盛り分ですか？", a: "5目盛り" }
+            // 第4章：力のはたらき（計算）
+            { c: 4, q: "地球上で質量100gの物体にはたらく重力の大きさは約何Nですか？", a: "約1N", e: "基本の定義です。100g = 1Nと覚えます。" },
+            { c: 4, q: "地球上で質量300gの物体にはたらく重力の大きさは何Nですか？", a: "3N", e: "式：300g ÷ 100g/N = 3N" },
+            { c: 4, q: "質量2kgの物体にはたらく重力の大きさは何Nですか？（100g=1Nとする）", a: "20N", e: "2kg = 2000g\n式：2000g ÷ 100g/N = 20N" },
+            { c: 4, q: "0.1Nの力で1cmのびるばねに、0.4Nの力を加えると何cmのびますか？", a: "4cm", e: "力が4倍（0.4÷0.1）なので、のびも4倍です。\n式：1cm × 4 = 4cm" },
+            { c: 4, q: "1Nで2cmのびるばねに3Nの力を加えると、のびは何cmになりますか？", a: "6cm", e: "力が3倍なので、のびも3倍です。\n式：2cm × 3 = 6cm" },
+            { c: 4, q: "月の重力は地球の約何分の1ですか？", a: "6分の1", e: "月は地球より質量が小さいため重力も小さいです。" },
+            { c: 4, q: "地球上で質量60gの物体の質量は、月面上では何gですか？", a: "60g", e: "重要：質量は場所によって変わりません。" },
+            { c: 4, q: "地球上で重さ0.6Nの物体の重さは、月面上では何Nになりますか？", a: "0.1N", e: "重さは重力によって変わります。\n式：0.6N × 1/6 = 0.1N" },
+            { c: 4, q: "月面上で180gの物体をばねばかりでつるすと、何Nを示しますか？", a: "0.3N", e: "地球上での重力：1.8N\n月面上での重力：1.8N × 1/6 = 0.3N" },
+            { c: 4, q: "元の長さが6.0cmのばねに100gのおもりをつるすと全長が6.8cmになりました。200gのおもりをつるすと全長は何cmになりますか？", a: "7.6cm", e: "のび：6.8 - 6.0 = 0.8cm (100gあたり)\n200gののび：0.8cm × 2 = 1.6cm\n全長：6.0 + 1.6 = 7.6cm" },
+            { c: 4, q: "ばねののびが2.5cmのとき、おもりの質量は何gですか？（0.1Nで1cmのびる場合）", a: "250g", e: "0.1N(10g)で1cmのびる。\n2.5倍なので、力も2.5倍(0.25N)。\n質量は250g。" },
+            { c: 4, q: "図で1Nを1cmの矢印で表すとき、3Nの力は何cmの矢印で書きますか？", a: "3cm", e: "力の大きさと矢印の長さは比例します。" },
+            { c: 4, q: "机の上に置いた5Nの物体に、机から受ける垂直抗力は何Nですか？", a: "5N", e: "物体が静止しているなら、重力と垂直抗力はつり合っています。" },
+            { c: 4, q: "床に置いた物体を1.5Nで水平に押したが動かなかった。このときの摩擦力は何Nですか？", a: "1.5N", e: "動かない場合、押す力と摩擦力は等しくなります。" },
+            { c: 4, q: "2本のばねA, Bを縦につなぎ、下端に0.6Nのおもりを吊るした。それぞれのばねが受ける力は何Nですか？", a: "ともに0.6N", e: "縦につないだ場合、どちらのばねにも同じ大きさの力がかかります。" },
+            { c: 4, q: "0.1Nで1cmのびるばねA, Bを並列に並べて棒で吊るし、棒の中央に0.6Nのおもりを下げた。各ばねののびは何cmですか？", a: "3cm", e: "並列の場合、力は2本のばねに半分ずつかかります。\n1本あたり0.3N。\n0.1Nで1cmなので、0.3Nで3cmのびます。" },
+            { c: 4, q: "300gの物体をばねでゆっくり引き上げ、ばねが6cmのびたところで床から離れた。このばねを5cmのばすのに必要な力は何Nですか？", a: "2.5N", e: "300g(3N)で6cmのびるばね。\nつまり1Nあたり2cm。\n5cmのばすには、5 ÷ 2 = 2.5N必要。" },
+            { c: 4, q: "前問で、ばねののびが2cmのとき、物体が床を押す力は何Nですか？", a: "2N", e: "ばねの力：2cmなので1Nで引いている。\n重力は3N。\n床を押す力 = 重力 - ばねの力 = 3N - 1N = 2N" },
+            { c: 4, q: "100gで2cmのびるばねに、あるおもりを吊るすと8cmのびた。おもりの質量は何gですか？", a: "400g", e: "のびが4倍(8cm÷2cm)なので、重さも4倍。\n100g × 4 = 400g" },
+            { c: 4, q: "質量150gの物体が月面上で上皿てんびんに乗っている。反対側には何gの分銅を乗せればつり合いますか？", a: "150g", e: "てんびんは質量をはかるため、場所に関係なくつり合う質量は同じです。" },
+            { c: 4, q: "0.5Nで0.8cmのびるばねに、350gのおもりを吊るすと何cmのびますか？", a: "5.6cm", e: "350g = 3.5N。\n力は7倍(3.5÷0.5)なので、のびも7倍。\n0.8cm × 7 = 5.6cm" },
+            { c: 4, q: "元の長さが12.0cmで、0.4Nで0.2cmのびるばねに160gのおもりを吊るしたときの全長は何cmですか？", a: "12.8cm", e: "160g = 1.6N (0.4Nの4倍)。\nのび：0.2cm × 4 = 0.8cm\n全長：12.0 + 0.8 = 12.8cm" },
+            { c: 4, q: "グラフで、0.2Nでばねののびが2.0cmのとき、このばねの比例定数（1Nあたりののび）は何cm/Nですか？", a: "10cm/N", e: "1Nにするには5倍(1.0÷0.2)すればよい。\n2.0cm × 5 = 10cm" },
+            { c: 4, q: "400gの物体を月面上でばねばかりに吊るすと、地球上の何gの物体と同じ値を示しますか？", a: "約66.7g", e: "月面では重力が1/6。\n400g × 1/6 ≒ 66.7g分の重さとして計測されます。" },
+            { c: 4, q: "力の大きさが4Nのとき、反対向きに何Nの力を加えればつり合いますか？", a: "4N", e: "つり合う条件：大きさが等しく、向きが反対。" },
+            { c: 4, q: "500gの物体を台ばかりに乗せ、ばねで上に引いた。ばねののびが3.6cm（1Nで1cmのびる）のとき、台ばかりの示す値は何gですか？", a: "140g", e: "ばねの力：3.6cmなので3.6N(360g分)で引いている。\n重力：500g。\n台ばかりへの力：500 - 360 = 140g" },
+            { c: 4, q: "前問で、台ばかりの値が150gになったとき、ばねののびは何cmですか？", a: "3.5cm", e: "ばねが支えている分：500g - 150g = 350g (3.5N)。\n1Nで1cmなので、3.5cmのびる。" },
+            { c: 4, q: "20gのおもり1個で2cmのびるばねに、120gのおもりを吊るすと何cmのびますか？", a: "12cm", e: "重さが6倍(120÷20)なので、のびも6倍。\n2cm × 6 = 12cm" },
+            { c: 4, q: "前問のばねで、全長が26cmになったとき（元の長さ20cm）、おもりがばねを引く力は何Nですか？", a: "0.6N", e: "のび：26 - 20 = 6cm。\n2cmで20gなので、6cmなら60g。\n60g = 0.6N" },
+            { c: 4, q: "方眼の1目盛りが3Nを表すとき、15Nの力を表す矢印は何目盛り分ですか？", a: "5目盛り", e: "式：15N ÷ 3N/目盛り = 5目盛り" }
         ];
 
-        // --- STATE MANAGEMENT ---
-        let currentQuestions = [];
-        let currentIndex = 0;
-        let isFlipped = false;
-        let selectedChapter = 'all'; // 'all', 1, 2, 3, 4
-        let selectedMode = 'sequential'; // 'sequential', 'random'
+        // --- STATE & UTILS ---
+        let currentQuestions = [], currentIndex = 0, isFlipped = false, selectedChapter = 'all', selectedMode = 'sequential';
+        let reviewList = [], isReviewMode = false;
+        let isQuickMode = false; // Flag to indicate if we are in quick mode
 
-        // --- DOM ELEMENTS ---
-        const screens = {
-            setup: document.getElementById('setup-screen'),
-            study: document.getElementById('study-screen'),
-            completion: document.getElementById('completion-screen')
-        };
-        const els = {
-            card: document.getElementById('card'),
-            questionText: document.getElementById('question-text'),
-            answerText: document.getElementById('answer-text'),
-            progressBar: document.getElementById('progress-bar'),
-            progressText: document.getElementById('progress-text'),
-            chapterBadge: document.getElementById('chapter-badge'),
-            nextBtn: document.getElementById('next-btn'),
-            version: document.getElementById('app-version')
+        const screens = { setup: document.getElementById('setup-screen'), study: document.getElementById('study-screen'), completion: document.getElementById('completion-screen') };
+        const els = { 
+            card: document.getElementById('card'), questionText: document.getElementById('question-text'), 
+            answerText: document.getElementById('answer-text'), explanationText: document.getElementById('explanation-text'),
+            explanationContainer: document.getElementById('explanation-container'),
+            progressBar: document.getElementById('progress-bar'), progressText: document.getElementById('progress-text'), 
+            chapterBadge: document.getElementById('chapter-badge'), version: document.getElementById('app-version'), 
+            frontControls: document.getElementById('front-controls'), backControls: document.getElementById('back-controls'),
+            completionEmoji: document.getElementById('completion-emoji'), completionTitle: document.getElementById('completion-title'), 
+            completionMsg: document.getElementById('completion-msg'), totalCount: document.getElementById('total-count'), 
+            reviewCount: document.getElementById('review-count'), btnStartReview: document.getElementById('btn-start-review') 
         };
 
-        // --- INITIALIZATION ---
-        window.onload = () => {
-            els.version.textContent = APP_VERSION;
-        };
+        window.onload = () => { els.version.textContent = APP_VERSION; };
 
-        // --- ACTIONS ---
-
-        // 1. Setup Selection
-        function selectChapter(chap) {
-            selectedChapter = chap;
-            // Update visual state of buttons
-            const btns = document.querySelectorAll('.chapter-btn');
-            btns.forEach((btn, idx) => {
-                // Determine if this button corresponds to the selection
-                // Logic: idx 0 is 'all', idx 1 is ch1, idx 2 is ch2, idx 3 is ch3, idx 4 is ch4
-                const isSelected = (chap === 'all' && idx === 0) || (chap === idx);
-                
-                // Toggle styles based on selection logic
-                if (isSelected) {
-                    btn.classList.add('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
-                    btn.classList.remove('border-slate-100');
-                } else {
-                    btn.classList.remove('border-blue-500', 'bg-blue-50', 'ring-2', 'ring-blue-300');
-                    btn.classList.add('border-slate-100');
-                }
-            });
+        // Font Size Adjuster based on character count
+        function getFontSizeClass(text, isQuestion) {
+            if (!text) return isQuestion ? "text-lg" : "text-2xl"; // Safety check
+            const len = text.length;
+            if (isQuestion) {
+                if (len <= 15) return "text-3xl md:text-5xl";
+                if (len <= 30) return "text-2xl md:text-4xl";
+                if (len <= 60) return "text-xl md:text-3xl";
+                return "text-lg md:text-2xl";
+            } else {
+                // Answer
+                if (len <= 5) return "text-5xl md:text-7xl";
+                if (len <= 10) return "text-4xl md:text-6xl";
+                if (len <= 20) return "text-3xl md:text-5xl";
+                return "text-2xl md:text-4xl";
+            }
         }
 
-        // Initialize default selection UI
+        // Setup & Start
+        function selectChapter(chap) {
+            selectedChapter = chap;
+            document.querySelectorAll('.chapter-btn').forEach((btn, idx) => {
+                const isSelected = (chap === 'all' && idx === 0) || (chap === idx);
+                btn.className = `chapter-btn w-full py-4 px-5 rounded-xl border-2 transition-colors text-left flex justify-between items-center group ${isSelected ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-300' : 'border-slate-100 hover:border-blue-400 hover:bg-slate-50'}`;
+            });
+        }
         selectChapter('all');
 
         function setMode(mode) {
             selectedMode = mode;
-            const btns = document.querySelectorAll('.mode-btn');
-            btns.forEach(btn => {
+            document.querySelectorAll('.mode-btn').forEach(btn => {
                 const isThisMode = btn.textContent.trim().includes(mode === 'sequential' ? '順番' : 'ランダム');
-                if (isThisMode) {
-                    btn.classList.add('border-blue-500', 'bg-blue-50', 'text-blue-700');
-                    btn.classList.remove('border-slate-200', 'text-slate-500');
-                } else {
-                    btn.classList.remove('border-blue-500', 'bg-blue-50', 'text-blue-700');
-                    btn.classList.add('border-slate-200', 'text-slate-500');
-                }
+                btn.className = `mode-btn flex-1 py-3 rounded-xl border-2 font-bold text-base transition-all ${isThisMode ? 'border-blue-500 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-500 hover:border-blue-300'}`;
             });
         }
 
-        // 2. Start Logic
+        // --- SPECIAL MODES (NEW) ---
+        function startQuickMode(type) {
+            let pool = [];
+            let limit = 0;
+
+            if (type === 'basic') {
+                // Chapter 1 & 2, 10 Questions
+                pool = masterData.filter(q => q.c === 1 || q.c === 2);
+                limit = 10;
+                isQuickMode = true; // Mark as quick mode
+            } else if (type === 'calc') {
+                // Chapter 3 & 4, 5 Questions
+                pool = masterData.filter(q => q.c === 3 || q.c === 4);
+                limit = 5;
+                isQuickMode = true;
+            }
+
+            if (pool.length === 0) return;
+
+            shuffleArray(pool);
+            currentQuestions = pool.slice(0, limit);
+
+            // Standard Start Logic
+            initSession();
+        }
+
         function startApp() {
-            // Filter questions
-            if (selectedChapter === 'all') {
-                currentQuestions = [...masterData];
-            } else {
-                currentQuestions = masterData.filter(q => q.c === selectedChapter);
-            }
+            // Standard Mode
+            if (selectedChapter === 'all') currentQuestions = [...masterData];
+            else currentQuestions = masterData.filter(q => q.c === selectedChapter);
+            
+            if (selectedMode === 'random') shuffleArray(currentQuestions);
+            
+            isQuickMode = false;
+            initSession();
+        }
 
-            // Shuffle if random mode
-            if (selectedMode === 'random') {
-                shuffleArray(currentQuestions);
-            }
-
-            // Reset state
-            currentIndex = 0;
-            isFlipped = false;
+        function initSession() {
+            currentIndex = 0; isFlipped = false; reviewList = []; isReviewMode = false;
             els.card.classList.remove('rotate-y-180');
-
-            // Switch screens
-            screens.setup.classList.add('hidden');
-            screens.completion.classList.add('hidden');
-            screens.study.classList.remove('hidden');
-
+            updateControlsVisibility(false);
+            switchScreen('study');
             renderCard();
             updateProgress();
         }
 
-        // 3. Card Logic
+        function startReviewMode() {
+            currentQuestions = [...reviewList];
+            reviewList = []; isReviewMode = true; currentIndex = 0; isFlipped = false;
+            els.card.classList.remove('rotate-y-180');
+            updateControlsVisibility(false);
+            switchScreen('study');
+            renderCard();
+            updateProgress();
+        }
+
+        // Render
         function renderCard() {
             const q = currentQuestions[currentIndex];
             els.questionText.textContent = q.q;
             els.answerText.textContent = q.a;
-            
-            // Set Badge text
-            let badge = "";
-            if (q.c === 1) badge = "音の性質";
-            else if (q.c === 2) badge = "力のはたらき";
-            else if (q.c === 3) badge = "音の性質（計算）";
-            else if (q.c === 4) badge = "力（計算）";
+            els.explanationText.innerText = q.e || ""; 
+
+            // Apply dynamic font size
+            els.questionText.className = `font-bold leading-snug text-slate-800 transition-all duration-300 ${getFontSizeClass(q.q, true)}`;
+            els.answerText.className = `font-bold text-indigo-700 leading-snug transition-all duration-300 ${getFontSizeClass(q.a, false)}`;
+
+            // Badge
+            let badge = isReviewMode ? "復習モード" : "音の性質";
+            if (!isReviewMode) {
+                if (q.c === 2) badge = "力のはたらき";
+                else if (q.c === 3) badge = "音（計算）";
+                else if (q.c === 4) badge = "力（計算）";
+            }
             els.chapterBadge.textContent = badge;
         }
 
@@ -439,70 +493,79 @@
             isFlipped = !isFlipped;
             if (isFlipped) {
                 els.card.classList.add('rotate-y-180');
+                updateControlsVisibility(true);
             } else {
                 els.card.classList.remove('rotate-y-180');
+                updateControlsVisibility(false);
             }
         }
 
-        function nextCard() {
-            // Flip back first if needed
-            if (isFlipped) {
-                flipCard();
-                // Wait slightly for animation before changing content, 
-                // but for speed, users prefer instant. Let's do instant content change after 200ms
-                setTimeout(() => proceed(), 300);
+        function updateControlsVisibility(isBack) {
+            if (isBack) {
+                els.frontControls.classList.add('hidden');
+                els.backControls.classList.remove('hidden'); els.backControls.classList.add('fade-in');
             } else {
-                proceed();
+                els.frontControls.classList.remove('hidden');
+                els.backControls.classList.add('hidden'); els.backControls.classList.remove('fade-in');
             }
+        }
 
-            function proceed() {
+        function handleResult(result) {
+            if (result === 'review') reviewList.push(currentQuestions[currentIndex]);
+            
+            els.card.classList.remove('rotate-y-180');
+            isFlipped = false;
+            updateControlsVisibility(false);
+            
+            setTimeout(() => {
                 if (currentIndex < currentQuestions.length - 1) {
-                    currentIndex++;
-                    renderCard();
-                    updateProgress();
+                    currentIndex++; renderCard(); updateProgress();
                 } else {
                     finishApp();
                 }
-            }
+            }, 300);
         }
 
         function updateProgress() {
-            const current = currentIndex + 1;
-            const total = currentQuestions.length;
-            const percentage = (current / total) * 100;
-            
-            els.progressBar.style.width = `${percentage}%`;
+            const current = currentIndex + 1, total = currentQuestions.length;
+            els.progressBar.style.width = `${(current / total) * 100}%`;
             els.progressText.textContent = `${current} / ${total}`;
         }
 
-        // 4. Completion
         function finishApp() {
-            screens.study.classList.add('hidden');
-            screens.completion.classList.remove('hidden');
-            document.getElementById('total-count').textContent = currentQuestions.length;
+            switchScreen('completion');
+            els.totalCount.textContent = currentQuestions.length;
+            els.reviewCount.textContent = reviewList.length;
             
-            const msgEl = document.getElementById('completion-msg');
-            if (selectedChapter === 'all') {
-                msgEl.textContent = "全範囲の確認完了！これでテストもバッチリですね。";
+            if (reviewList.length > 0) {
+                els.completionEmoji.textContent = "💪";
+                els.completionTitle.textContent = "復習のチャンス！";
+                els.completionMsg.textContent = `${reviewList.length}問の「不安な問題」があります。\n今すぐ復習して定着させましょう！`;
+                els.btnStartReview.classList.remove('hidden');
             } else {
-                msgEl.textContent = "この章はマスターしましたね！他の章も挑戦しましょう。";
+                els.completionEmoji.textContent = "🏆";
+                els.completionTitle.textContent = (isReviewMode || isQuickMode) ? "テスト完了！" : "完璧です！";
+                els.completionMsg.textContent = "素晴らしい集中力です！";
+                els.btnStartReview.classList.add('hidden');
             }
         }
 
         function resetToMenu() {
-            screens.study.classList.add('hidden');
-            screens.completion.classList.add('hidden');
-            screens.setup.classList.remove('hidden');
+            reviewList = []; isReviewMode = false; isQuickMode = false;
+            switchScreen('setup');
         }
 
-        // --- UTILS ---
+        function switchScreen(screenName) {
+            Object.values(screens).forEach(s => s.classList.add('hidden'));
+            screens[screenName].classList.remove('hidden');
+        }
+
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
             }
         }
-
     </script>
 </body>
 </html>
