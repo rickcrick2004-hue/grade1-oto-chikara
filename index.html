@@ -50,7 +50,7 @@
                     メニューへ
                 </button>
                 <div class="text-sm md:text-base bg-blue-700 px-2 py-1 rounded">
-                    Ver. <span id="app-version">1.6.2</span>
+                    Ver. <span id="app-version">1.7.0</span>
                 </div>
             </div>
         </div>
@@ -129,11 +129,16 @@
         <!-- STUDY SCREEN -->
         <div id="study-screen" class="hidden w-full h-full flex flex-col items-center justify-between py-2">
             
-            <!-- Progress Bar -->
+            <!-- Progress Bar & Timer -->
             <div class="w-full max-w-2xl mb-4 px-2">
-                <div class="flex justify-between text-sm text-slate-500 mb-1 font-mono">
-                    <span id="progress-text">1 / 30</span>
-                    <span id="chapter-badge">音の性質</span>
+                <div class="flex justify-between items-end mb-2">
+                    <div class="flex flex-col">
+                        <span id="chapter-badge" class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full mb-1 w-fit">音の性質</span>
+                        <span id="progress-text" class="text-sm text-slate-500 font-mono">1 / 30</span>
+                    </div>
+                    <div class="text-xl font-bold text-slate-700 font-mono flex items-center">
+                        <span class="mr-1 text-base">⏱️</span><span id="timer-display">0.0s</span>
+                    </div>
                 </div>
                 <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
                     <div id="progress-bar" class="bg-blue-600 h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -209,14 +214,19 @@
             <h2 class="text-3xl font-bold text-slate-800" id="completion-title">学習完了！</h2>
             <p class="text-lg text-slate-600" id="completion-msg">お疲れ様でした。</p>
             
+            <div class="bg-indigo-50 p-4 rounded-xl">
+                <p class="text-sm text-slate-500 mb-1">かかった時間</p>
+                <p class="text-5xl font-bold text-indigo-600 font-mono"><span id="final-time">0.0</span><span class="text-2xl ml-1">s</span></p>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-blue-50 p-4 rounded-xl">
                     <p class="text-sm text-slate-500">今回の学習数</p>
-                    <p class="text-4xl font-bold text-blue-600"><span id="total-count">0</span> 問</p>
+                    <p class="text-3xl font-bold text-blue-600"><span id="total-count">0</span> 問</p>
                 </div>
                 <div class="bg-amber-50 p-4 rounded-xl">
                     <p class="text-sm text-slate-500">復習が必要</p>
-                    <p class="text-4xl font-bold text-amber-600"><span id="review-count">0</span> 問</p>
+                    <p class="text-3xl font-bold text-amber-600"><span id="review-count">0</span> 問</p>
                 </div>
             </div>
 
@@ -238,7 +248,7 @@
 
     <!-- Application Logic -->
     <script>
-        const APP_VERSION = "1.6.2";
+        const APP_VERSION = "1.7.0";
         
         // --- DATA (Answer split into 'a': Answer and 'e': Explanation) ---
         const masterData = [
@@ -360,6 +370,7 @@
         let currentQuestions = [], currentIndex = 0, isFlipped = false, selectedChapter = 'all', selectedMode = 'sequential';
         let reviewList = [], isReviewMode = false;
         let isQuickMode = false; // Flag to indicate if we are in quick mode
+        let timerInterval, startTime, elapsedTime = 0; // Timer variables
 
         const screens = { setup: document.getElementById('setup-screen'), study: document.getElementById('study-screen'), completion: document.getElementById('completion-screen') };
         const els = { 
@@ -371,7 +382,8 @@
             frontControls: document.getElementById('front-controls'), backControls: document.getElementById('back-controls'),
             completionEmoji: document.getElementById('completion-emoji'), completionTitle: document.getElementById('completion-title'), 
             completionMsg: document.getElementById('completion-msg'), totalCount: document.getElementById('total-count'), 
-            reviewCount: document.getElementById('review-count'), btnStartReview: document.getElementById('btn-start-review') 
+            reviewCount: document.getElementById('review-count'), btnStartReview: document.getElementById('btn-start-review'),
+            timerDisplay: document.getElementById('timer-display'), finalTime: document.getElementById('final-time')
         };
 
         window.onload = () => { els.version.textContent = APP_VERSION; };
@@ -456,6 +468,7 @@
             switchScreen('study');
             renderCard();
             updateProgress();
+            startTimer(); // Start timer here
         }
 
         function startReviewMode() {
@@ -466,6 +479,26 @@
             switchScreen('study');
             renderCard();
             updateProgress();
+            startTimer(); // Start timer here as well
+        }
+
+        // Timer Functions
+        function startTimer() {
+            startTime = Date.now();
+            elapsedTime = 0;
+            clearInterval(timerInterval);
+            els.timerDisplay.textContent = "0.0s";
+            
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                elapsedTime = (now - startTime) / 1000;
+                els.timerDisplay.textContent = elapsedTime.toFixed(1) + 's';
+            }, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            return elapsedTime.toFixed(1);
         }
 
         // Render
@@ -533,9 +566,11 @@
         }
 
         function finishApp() {
+            const finalTime = stopTimer(); // Stop timer and get value
             switchScreen('completion');
             els.totalCount.textContent = currentQuestions.length;
             els.reviewCount.textContent = reviewList.length;
+            els.finalTime.textContent = finalTime; // Display final time
             
             if (reviewList.length > 0) {
                 els.completionEmoji.textContent = "💪";
@@ -552,6 +587,7 @@
 
         function resetToMenu() {
             reviewList = []; isReviewMode = false; isQuickMode = false;
+            stopTimer(); // Ensure timer is stopped
             switchScreen('setup');
         }
 
